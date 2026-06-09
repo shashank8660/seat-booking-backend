@@ -1,5 +1,6 @@
 package com.bmw.seat.book.services;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,12 @@ public class SeatService {
 	private SeatRepository seatRepo;
 
 	public List<Seat> getAllSeats() {
-		return seatRepo.findAll();
+	    return seatRepo.findAll()
+	        .stream()
+	        .sorted(Comparator.comparingInt(seat ->
+	            Integer.parseInt(seat.getSeatNumber().substring(1))
+	        ))
+	        .toList();
 	}
 
 	@CacheEvict(value = "seats", allEntries = true)
